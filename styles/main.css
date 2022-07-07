@@ -1,4 +1,12 @@
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .head {
+  border-radius: 50%;
   background: #fc0;
   height: 100px;
   position: relative;
