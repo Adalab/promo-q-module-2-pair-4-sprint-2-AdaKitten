@@ -13,6 +13,7 @@ const inputRace = document.querySelector(".js-input-race");
 const linkNewFormElememt = document.querySelector(".js-button-new-form");
 const labelMesageError = document.querySelector(".js-label-error");
 const input_search_desc = document.querySelector(".js_in_search_desc");
+const input_search_race = document.querySelector(".js_in_search_race");
 
 //Objetos con cada gatito
 const kittenData_1 = {
@@ -124,15 +125,31 @@ function cancelNewKitten(event) {
 }
 
 //Filtrar por descripción
+// const renderFilteredKitten = (filteredKitten) => {
+//   listElement.innerHTML = "";
+//   listElement.innerHTML += filteredKitten;
+// };
+
 function filterKitten(event) {
   event.preventDefault();
-  const descrSearchText = input_search_desc.value;
-  listElement.innerHTML = "";
-  for (const kittenItem of kittenDataList) {
-    if (kittenItem.desc.includes(descrSearchText)) {
-      listElement.innerHTML += renderKitten(kittenItem);
-    }
-  }
+  // const descrSearchText = input_search_desc.value;
+  // listElement.innerHTML = "";
+  // for (const kittenItem of kittenDataList) {
+  //   if (kittenItem.desc.includes(descrSearchText)) {
+  //     listElement.innerHTML += renderKitten(kittenItem);
+  //   }
+  // }
+  const searchDescFilter = input_search_desc.value;
+  const searchRaceFilter = input_search_race.value;
+
+  const filteredKitten = kittenDataList
+    .filter((oneKitten) =>
+      oneKitten.desc.toLowerCase().includes(searchDescFilter)
+    )
+    .filter((oneKitten) =>
+      oneKitten.race.toLowerCase().includes(searchRaceFilter)
+    );
+  renderKittenList(filteredKitten);
 }
 
 //Mostrar el litado de gatitos en ell HTML
