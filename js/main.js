@@ -15,21 +15,38 @@ const labelMesageError = document.querySelector('.js-label-error');
 const input_search_desc = document.querySelector('.js_in_search_desc');
 const input_search_race = document.querySelector('.js_in_search_race');
 
-const GITHUB_USER = 'tu_usuario_de_github_aqui';
+const GITHUB_USER = 'Tidus';
 const SERVER_URL = `https://adalab-api.herokuapp.com/api/kittens/${GITHUB_USER}`;
 
 let kittenDataList = [];
-//Petición al servidor
 
-fetch(SERVER_URL, {
-  method: 'GET',
-  headers: { 'Content-Type': 'application/json' },
-})
-  .then((response) => response.json())
-  .then((json) => {
-    kittenDataList = json.results;
-    renderKittenList(kittenDataList);
-  });
+const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
+//Petición al servidor
+console.log(kittenListStored);
+if (kittenListStored) {
+  //si existe el listado de gatitos en el local storage
+  // vuelve a pintar el listado de gatitos
+  //...
+  //completa el código...
+  console.log('Hola');
+  renderKittenList(kittenDataList);
+} else {
+  //sino existe el listado de gatitos en el local storage
+  //haz la petición al servidor
+  fetch(SERVER_URL, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      kittenDataList = json.results;
+      localStorage.setItem('kittensList', JSON.stringify(kittenDataList));
+      renderKittenList(kittenDataList);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 //Funciones
 function renderKitten(kittenData) {
@@ -37,7 +54,7 @@ function renderKitten(kittenData) {
     <article>
       <img
         class="card_img"
-        src=${kittenData.image}
+        src=${kittenData.url}
         alt="gatito"
       />
       <h3 class="card_title">${kittenData.name}</h3>
@@ -99,7 +116,7 @@ function addNewKitten(event) {
   const newKittenDataObject = {
     name: inputName.value,
     desc: inputDesc.value,
-    photo: inputPhoto.href,
+    url: inputPhoto.href,
     race: inputRace.value,
   };
   kittenDataList.push(newKittenDataObject);
