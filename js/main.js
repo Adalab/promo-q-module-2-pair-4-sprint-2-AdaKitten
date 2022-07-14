@@ -20,19 +20,14 @@ const SERVER_URL = `https://adalab-api.herokuapp.com/api/kittens/${GITHUB_USER}`
 
 let kittenDataList = [];
 
-const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
+let kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
+
 //Petición al servidor
 console.log(kittenListStored);
 if (kittenListStored) {
-  //si existe el listado de gatitos en el local storage
-  // vuelve a pintar el listado de gatitos
-  //...
-  //completa el código...
   console.log('Hola');
   renderKittenList(kittenDataList);
 } else {
-  //sino existe el listado de gatitos en el local storage
-  //haz la petición al servidor
   fetch(SERVER_URL, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -123,6 +118,26 @@ function addNewKitten(event) {
   cleanInputs();
   labelMesageError.innerHTML = 'Mola! Un nuevo gatito en Adalab!';
   renderKittenList(kittenDataList);
+  // Agregar gatito nuevo al localstorage
+  fetch(SERVER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newKittenDataObject),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.success) {
+        kittenDataList.push(newKittenDataObject);
+        kittenListStored = localStorage.setItem(
+          'kittensList',
+          JSON.stringify(kittenDataList)
+        );
+        renderKittenList(kittenDataList);
+        cleanInputs();
+      } else {
+        labelMesageError.innerHTML = "Las cagao' bacalao'";
+      }
+    });
 }
 //Cancelar la búsqueda de un gatito
 function cancelNewKitten(event) {
